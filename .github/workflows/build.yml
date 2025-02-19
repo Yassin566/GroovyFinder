@@ -28,7 +28,6 @@ jobs:
         Expand-Archive -Path "TOS_DI-20211109_1610-V8.0.1.zip" -DestinationPath "C:\opt\talend-tos"
         Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
         Set-Location -Path "C:\opt\talend-tos\TOS_DI-20211109_1610-V8.0.1"
-        .\TOS_DI-linux-gtk-x86_64.exe # Running Talend Open Studio on Windows
 
     - name: Run Talend Job
       run: |
