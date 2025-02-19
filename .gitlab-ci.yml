@@ -1,0 +1,38 @@
+stages:
+  - setup
+  - build
+  - package
+
+variables:
+  TOS_INSTALL_URL: "https://github.com/advanova/talend-open-studio/releases/download/v8.0.1/TOS_DI-20211109_1610-V8.0.1.zip"
+  TOS_INSTALL_DIR: "/opt/talend-tos"
+
+cache:
+  key: talend-installation
+  paths:
+    - $TOS_INSTALL_DIR
+
+setup_tos:
+  stage: setup
+  script:
+    - if [ ! -d "$TOS_INSTALL_DIR" ]; then
+      echo "Downloading Talend Open Studio...";
+      wget $TOS_INSTALL_URL -O talend-tos.zip;
+      unzip talend-tos.zip -d $TOS_INSTALL_DIR;
+      else
+      echo "Talend Open Studio already installed, skipping download.";
+      fi
+    - chmod +x $TOS_INSTALL_DIR/TOS_DI-linux-x86_64
+
+build_project:
+  stage: build
+  script:
+    - $TOS_INSTALL_DIR/TOS_DI-linux-x86_64 -nosplash -data $CI_PROJECT_DIR -application org.talend.commandline.CommandLine -cmd buildJob -job my_job -output $CI_PROJECT_DIR/build_output -format standalone
+
+package_project:
+  stage: package
+  script:
+    - zip -r talend_job_standalone.zip build_output/
+  artifacts:
+    paths:
+      - talend_job_standalone.zip
