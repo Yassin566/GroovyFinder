@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:TalendMetadata="http://www.talend.org/metadata/connection/2010" xmlns:orgomg.cwm.resource.relational="http:///orgomg/cwm/resource/relational.ecore">
+  <TalendMetadata:DatabaseConnection xmi:id="_5_EYUO4BEe-bndvutZoCGA" name="CLV_IMP_34" id="_xIYrgO4BEe-bndvutZoCGA" label="CLV_IMP_34" dataPackage="_6TH8wO4BEe-bndvutZoCGA _6TIj0O4BEe-bndvutZoCGA _6TIj0e4BEe-bndvutZoCGA _6TIj0u4BEe-bndvutZoCGA _6TIj0-4BEe-bndvutZoCGA _6TIj1O4BEe-bndvutZoCGA _6TIj1e4BEe-bndvutZoCGA _6TIj1u4BEe-bndvutZoCGA _6TIj1-4BEe-bndvutZoCGA _6TIj2O4BEe-bndvutZoCGA _6TIj2e4BEe-bndvutZoCGA _6TIj2u4BEe-bndvutZoCGA _6TIj2-4BEe-bndvutZoCGA _6TIj3O4BEe-bndvutZoCGA _6TIj3e4BEe-bndvutZoCGA _6TIj3u4BEe-bndvutZoCGA _6TIj3-4BEe-bndvutZoCGA _6TIj4O4BEe-bndvutZoCGA _6TIj4e4BEe-bndvutZoCGA _6TIj4u4BEe-bndvutZoCGA _6TIj4-4BEe-bndvutZoCGA _6TIj5O4BEe-bndvutZoCGA _6TIj5e4BEe-bndvutZoCGA _6TIj5u4BEe-bndvutZoCGA _6TIj5-4BEe-bndvutZoCGA _6TIj6O4BEe-bndvutZoCGA _6TIj6e4BEe-bndvutZoCGA _6TIj6u4BEe-bndvutZoCGA _6TIj6-4BEe-bndvutZoCGA _6TIj7O4BEe-bndvutZoCGA _6TIj7e4BEe-bndvutZoCGA _6TIj7u4BEe-bndvutZoCGA _6TIj7-4BEe-bndvutZoCGA _6TIj8O4BEe-bndvutZoCGA _6TIj8e4BEe-bndvutZoCGA _6TIj8u4BEe-bndvutZoCGA _6TIj8-4BEe-bndvutZoCGA _6TIj9O4BEe-bndvutZoCGA" DatabaseType="Oracle with SID" DriverClass="oracle.jdbc.OracleDriver" URL="jdbc:oracle:thin:@10.6.140.187:1521:orcl" dbVersionString="ORACLE_12" Port="1521" Username="CLV_IMP_34" Password="ZqnX+gF+ozopuCzsqXUOxw==" ServerName="10.6.140.187" DatasourceName="" FileFieldName="" SID="orcl" SqlSynthax="SQL Syntax" StringQuote="10.6.140.187&quot;" DbmsId="oracle_id" ProductId="ORACLE" AdditionalParams="" StandardSQL="true" SQLMode="false" UiSchema="">
+    <taggedValue xmi:id="_5_E_YO4BEe-bndvutZoCGA" tag="Is Conn Need Reload" value="false"/>
+    <taggedValue xmi:id="_5_LGAO4BEe-bndvutZoCGA" tag="package filter" value=""/>
+    <taggedValue xmi:id="_5_OwYO4BEe-bndvutZoCGA" tag="Status" value=""/>
+    <taggedValue xmi:id="_5_OwYe4BEe-bndvutZoCGA" tag="Version" value="0.1"/>
+    <taggedValue xmi:id="_5_OwYu4BEe-bndvutZoCGA" tag="Purpose" value=""/>
+    <taggedValue xmi:id="_5_OwY-4BEe-bndvutZoCGA" tag="Description" value=""/>
+    <taggedValue xmi:id="_5_OwZO4BEe-bndvutZoCGA" tag="Author" value=""/>
+    <taggedValue xmi:id="_5_OwZe4BEe-bndvutZoCGA" tag="otherParameter"/>
+    <taggedValue xmi:id="_6GgdEO4BEe-bndvutZoCGA" tag="DB ProductName" value="Oracle"/>
+    <taggedValue xmi:id="_6GgdEe4BEe-bndvutZoCGA" tag="DB ProductVersion" value="Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production"/>
+    <taggedValue xmi:id="_6GgdEu4BEe-bndvutZoCGA" tag="DB IdentifierQuoteString" value="&quot;"/>
+    <parameters xmi:id="_5_E_Ye4BEe-bndvutZoCGA" key="CONN_PARA_KEY_USERNAME" value="CLV_IMP_34"/>
+  </TalendMetadata:DatabaseConnection>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TH8wO4BEe-bndvutZoCGA" name="ANONYMOUS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj0O4BEe-bndvutZoCGA" name="APPQOSSYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj0e4BEe-bndvutZoCGA" name="AUDSYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj0u4BEe-bndvutZoCGA" name="CLV_IMP_34" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj0-4BEe-bndvutZoCGA" name="CTXSYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj1O4BEe-bndvutZoCGA" name="DBSFWUSER" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj1e4BEe-bndvutZoCGA" name="DBSNMP" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj1u4BEe-bndvutZoCGA" name="DIP" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj1-4BEe-bndvutZoCGA" name="DVF" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj2O4BEe-bndvutZoCGA" name="DVSYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj2e4BEe-bndvutZoCGA" name="GGSYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj2u4BEe-bndvutZoCGA" name="GSMADMIN_INTERNAL" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj2-4BEe-bndvutZoCGA" name="GSMCATUSER" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj3O4BEe-bndvutZoCGA" name="GSMROOTUSER" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj3e4BEe-bndvutZoCGA" name="GSMUSER" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj3u4BEe-bndvutZoCGA" name="LBACSYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj3-4BEe-bndvutZoCGA" name="MDDATA" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj4O4BEe-bndvutZoCGA" name="MDSYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj4e4BEe-bndvutZoCGA" name="OJVMSYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj4u4BEe-bndvutZoCGA" name="OLAPSYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj4-4BEe-bndvutZoCGA" name="ORACLE_OCM" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj5O4BEe-bndvutZoCGA" name="ORDDATA" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj5e4BEe-bndvutZoCGA" name="ORDPLUGINS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj5u4BEe-bndvutZoCGA" name="ORDSYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj5-4BEe-bndvutZoCGA" name="OUTLN" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj6O4BEe-bndvutZoCGA" name="REMOTE_SCHEDULER_AGENT" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj6e4BEe-bndvutZoCGA" name="SI_INFORMTN_SCHEMA" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj6u4BEe-bndvutZoCGA" name="SOLIFE_QA_VAL_S7_002" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj6-4BEe-bndvutZoCGA" name="SYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj7O4BEe-bndvutZoCGA" name="SYS$UMF" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj7e4BEe-bndvutZoCGA" name="SYSBACKUP" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj7u4BEe-bndvutZoCGA" name="SYSDG" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj7-4BEe-bndvutZoCGA" name="SYSKM" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj8O4BEe-bndvutZoCGA" name="SYSRAC" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj8e4BEe-bndvutZoCGA" name="SYSTEM" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj8u4BEe-bndvutZoCGA" name="WMSYS" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj8-4BEe-bndvutZoCGA" name="XDB" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+  <orgomg.cwm.resource.relational:Schema xmi:id="_6TIj9O4BEe-bndvutZoCGA" name="XS$NULL" dataManager="_5_EYUO4BEe-bndvutZoCGA"/>
+</xmi:XMI>
