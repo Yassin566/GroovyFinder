@@ -67,9 +67,9 @@ jobs:
           export DISPLAY=:99
           
           /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 \
-            -nosplash -consoleLog -debug -data $GITHUB_WORKSPACE/GroovyFinder \
+            -nosplash -consoleLog -debug -data $GITHUB_WORKSPACE \
             -application org.talend.commandline.CommandLine \
-            -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone || \
+            -cmd buildJob -job GroovyFind -output /opt/build_output -format standalone || \
           (cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/*.log && exit 1)
 
       - name: Archive Artifacts
@@ -78,5 +78,5 @@ jobs:
         with:
           name: build-artifacts
           path: |
-            build_output/
+            /opt/build_output/
             /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/*.log
