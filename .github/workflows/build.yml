@@ -26,11 +26,11 @@ jobs:
       run: |
         wget https://github.com/advanova/talend-open-studio/releases/download/v8.0.1/TOS_DI-20211109_1610-V8.0.1.zip
         unzip TOS_DI-20211109_1610-V8.0.1.zip -d /opt/talend-tos
-        chmod +x /opt/talend-tos/TOS_DI-linux-x86
+        chmod +x /opt/talend-tos/TOS_DI-linux-gtk-x86_64
 
     - name: Build Talend Job
       run: |
-        /opt/talend-tos/TOS_DI-linux-gtk-x86 -nosplash -data $GITHUB_WORKSPACE -application org.talend.commandline.CommandLine -cmd buildJob -job my_job -output $GITHUB_WORKSPACE/build_output -format standalone
+        /opt/talend-tos/TOS_DI-linux-gtk-x86_64 -nosplash -data $GITHUB_WORKSPACE -application org.talend.commandline.CommandLine -cmd buildJob -job my_job -output $GITHUB_WORKSPACE/build_output -format standalone
 
     - name: Package Job into Zip
       run: |
