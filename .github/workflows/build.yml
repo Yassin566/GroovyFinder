@@ -18,12 +18,12 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'
-          distribution: 'zulu'  # Switch back to Zulu JDK
+          distribution: 'zulu'
 
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb libgtk-3-0 libxtst6 unzip libcanberra-gtk3-module libxkbcommon-x11-0
+          sudo apt-get install -y xvfb libgtk-3-0 libxtst6 unzip libcanberra-gtk3-module libxkbcommon-x11-0 libwebkitgtk-3.0-0 libxslt1.1
 
       - name: Download Talend
         run: |
@@ -47,12 +47,12 @@ jobs:
         run: |
           export DISPLAY=:99
           Xvfb $DISPLAY -screen 0 1920x1080x24 +extension GLX -nolisten tcp -noreset &
-          sleep 10  # Critical wait period
+          sleep 30  # Increased wait period
           
           /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 \
             -nosplash -consoleLog -data $GITHUB_WORKSPACE \
             -application org.talend.commandline.CommandLine \
-            -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone
+            -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone -debug
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
