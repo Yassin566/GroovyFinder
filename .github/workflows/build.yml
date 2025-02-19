@@ -52,6 +52,15 @@ jobs:
           Xvfb $DISPLAY -screen 0 1920x1080x24 +extension GLX -nolisten tcp -noreset &
           sleep 5
           xdpyinfo -display :99  # Ensure Xvfb is running
+          
+      - name: Clean Talend Configuration
+        run: |
+          rm -rf /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/org.eclipse.osgi
+
+      - name: Force Eclipse to Rebuild Plugin Cache
+        run: |
+          /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 \
+          -clean -initialize
 
       - name: Run Talend Build with Debugging
         run: |
