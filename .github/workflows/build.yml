@@ -23,7 +23,8 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb libgtk-3-0 libxtst6 unzip libcanberra-gtk3-module libxkbcommon-x11-0 libwebkit2gtk-4.0-37 libxslt1.1
+          sudo apt-get install -y xvfb libgtk-3-0 libxtst6 unzip libcanberra-gtk3-module libxkbcommon-x11-0 \
+                                  libdbus-glib-1-2 libcanberra-gtk-module
 
       - name: Download Talend
         run: |
@@ -31,30 +32,37 @@ jobs:
           unzip -q TOS_DI-20211109_1610-V8.0.1.zip -d /opt/talend-tos
           chmod +x /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64
 
-      - name: Clean OSGi config
+      - name: Backup and Modify OSGi Config
         run: |
+          CONFIG_FILE="/opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini"
+          cp "$CONFIG_FILE" "${CONFIG_FILE}.bak"  # Backup
+
           sed -i \
             -e '/win32/d' \
             -e '/macosx/d' \
-            /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+            "$CONFIG_FILE"
 
-      - name: Configure core bundles
-        run: |
-          sed -i 's/osgi.bundles=.*/osgi.bundles=org.eclipse.equinox.simpleconfigurator@1:start,org.eclipse.core.runtime@2:start,org.eclipse.equinox.common@3:start,org.eclipse.update.configurator@4:start,org.eclipse.core.resources@5:start,org.eclipse.equinox.preferences@6:start/' \
-            /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i 's|osgi.bundles=.*|osgi.bundles=org.eclipse.equinox.simpleconfigurator@1:start,org.eclipse.core.runtime@2:start,org.eclipse.equinox.common@3:start,org.eclipse.update.configurator@4:start,org.eclipse.core.resources@5:start,org.eclipse.equinox.preferences@6:start|' \
+            "$CONFIG_FILE"
 
-      - name: Run Talend build
+      - name: Start Xvfb and Verify Display
         run: |
           export DISPLAY=:99
           Xvfb $DISPLAY -screen 0 1920x1080x24 +extension GLX -nolisten tcp -noreset &
-          sleep 30  # Increased wait period
-          
-          /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 \
-            -nosplash -consoleLog -data $GITHUB_WORKSPACE \
-            -application org.talend.commandline.CommandLine \
-            -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone -debug
+          sleep 5
+          xdpyinfo -display :99  # Ensure Xvfb is running
 
-      - name: Archive artifacts
+      - name: Run Talend Build with Debugging
+        run: |
+          export DISPLAY=:99
+
+          /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 \
+            -nosplash -consoleLog -debug -data $GITHUB_WORKSPACE \
+            -application org.talend.commandline.CommandLine \
+            -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone || \
+          (cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/*.log && exit 1)
+
+      - name: Archive Artifacts
         uses: actions/upload-artifact@v4
         if: always()
         with:
