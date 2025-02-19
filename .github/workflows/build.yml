@@ -14,13 +14,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '11'
-          distribution: 'zulu'
+          distribution: 'temurin'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb at-spi2-core libgtk-3-0 libxtst6 unzip
 
       - name: Download Talend Open Studio
         run: |
@@ -28,55 +33,31 @@ jobs:
           unzip TOS_DI-20211109_1610-V8.0.1.zip -d /opt/talend-tos
           chmod +x /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64
 
-      - name: Install Xvfb
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-
-      - name: Clean up OSGi bundles
+      - name: Clean OSGi configuration
         run: |
           sed -i \
             -e '/org.eclipse.compare.win32/d' \
             -e '/org.eclipse.jdt.launching.macosx/d' \
-            -e '/org.eclipse.jdt.launching.ui.macosx/d' \
-            -e '/org.eclipse.swt.cocoa.macosx/d' \
             -e '/org.eclipse.swt.win32.win32.x86_64/d' \
             -e '/org.eclipse.equinox.launcher.win32.win32.x86_64/d' \
-            -e '/org.eclipse.equinox.security.win32.x86_64/d' \
-            -e '/org.eclipse.core.filesystem.win32.x86_64/d' \
-            -e '/org.eclipse.core.net.win32.x86_64/d' \
-            -e '/org.eclipse.core.resources.win32.x86_64/d' \
-            -e '/org.eclipse.ui.win32/d' \
-            -e '/org.eclipse.e4.ui.swt.win32/d' \
-            -e '/org.eclipse.ecf.provider.filetransfer.httpclient45.win32/d' \
-            -e '/org.apache.httpcomponents.httpclient.win/d' \
             /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
 
-      - name: Fix config.ini for OSGi bundles
+      - name: Configure OSGi bundles
         run: |
-          sed -i 's/osgi.bundles=.*/osgi.bundles=org.eclipse.core.runtime@start,org.eclipse.equinox.simpleconfigurator@1:start,org.eclipse.equinox.common@2:start,org.eclipse.update.configurator@3:start,org.eclipse.core.runtime@4:start/' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i 's/osgi.bundles=.*/osgi.bundles=org.eclipse.equinox.simpleconfigurator@1:start,org.eclipse.core.runtime@start,org.eclipse.equinox.common@2:start,org.eclipse.update.configurator@3:start/' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
 
-      - name: Run Talend Build with Xvfb
+      - name: Run Talend Build
         run: |
-          xvfb-run -a -e /dev/stdout --server-args="-screen 0 1024x768x24" \
+          xvfb-run -a -s "-screen 0 1024x768x24 -ac +extension GLX +render -noreset" \
             /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 \
             -nosplash -consoleLog -data $GITHUB_WORKSPACE \
             -application org.talend.commandline.CommandLine \
             -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone
 
-      - name: Display Talend logs on failure
-        if: failure()
-        run: |
-          echo "Talend Job Failed. Displaying the log:"
-          cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/*.log
-
-      - name: Package Job into Zip
-        run: |
-          zip -r talend_job_standalone.zip build_output/
-
-      - name: Upload Build Artifact
+      - name: Archive build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: talend-job-zip
-          path: talend_job_standalone.zip
+          name: talend-job
+          path: |
+            build_output/
+            /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/*.log
