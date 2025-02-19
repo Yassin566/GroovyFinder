@@ -2,11 +2,9 @@ name: Build Talend Job
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   pull_request:
-    branches:
-      - master
+    branches: [master]
 
 jobs:
   build:
@@ -20,44 +18,47 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'
-          distribution: 'temurin'
+          distribution: 'zulu'  # Switch back to Zulu JDK
 
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb at-spi2-core libgtk-3-0 libxtst6 unzip
+          sudo apt-get install -y xvfb libgtk-3-0 libxtst6 unzip libcanberra-gtk3-module libxkbcommon-x11-0
 
-      - name: Download Talend Open Studio
+      - name: Download Talend
         run: |
-          wget https://github.com/advanova/talend-open-studio/releases/download/v8.0.1/TOS_DI-20211109_1610-V8.0.1.zip
-          unzip TOS_DI-20211109_1610-V8.0.1.zip -d /opt/talend-tos
+          wget -q https://github.com/advanova/talend-open-studio/releases/download/v8.0.1/TOS_DI-20211109_1610-V8.0.1.zip
+          unzip -q TOS_DI-20211109_1610-V8.0.1.zip -d /opt/talend-tos
           chmod +x /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64
 
-      - name: Clean OSGi configuration
+      - name: Clean OSGi config
         run: |
           sed -i \
-            -e '/org.eclipse.compare.win32/d' \
-            -e '/org.eclipse.jdt.launching.macosx/d' \
-            -e '/org.eclipse.swt.win32.win32.x86_64/d' \
-            -e '/org.eclipse.equinox.launcher.win32.win32.x86_64/d' \
+            -e '/win32/d' \
+            -e '/macosx/d' \
             /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
 
-      - name: Configure OSGi bundles
+      - name: Configure core bundles
         run: |
-          sed -i 's/osgi.bundles=.*/osgi.bundles=org.eclipse.equinox.simpleconfigurator@1:start,org.eclipse.core.runtime@start,org.eclipse.equinox.common@2:start,org.eclipse.update.configurator@3:start/' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i 's/osgi.bundles=.*/osgi.bundles=org.eclipse.equinox.simpleconfigurator@1:start,org.eclipse.core.runtime@2:start,org.eclipse.equinox.common@3:start,org.eclipse.update.configurator@4:start,org.eclipse.core.resources@5:start,org.eclipse.equinox.preferences@6:start/' \
+            /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
 
-      - name: Run Talend Build
+      - name: Run Talend build
         run: |
-          xvfb-run -a -s "-screen 0 1024x768x24 -ac +extension GLX +render -noreset" \
-            /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 \
+          export DISPLAY=:99
+          Xvfb $DISPLAY -screen 0 1920x1080x24 +extension GLX -nolisten tcp -noreset &
+          sleep 10  # Critical wait period
+          
+          /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 \
             -nosplash -consoleLog -data $GITHUB_WORKSPACE \
             -application org.talend.commandline.CommandLine \
             -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone
 
-      - name: Archive build artifacts
+      - name: Archive artifacts
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: talend-job
+          name: build-artifacts
           path: |
             build_output/
             /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/*.log
