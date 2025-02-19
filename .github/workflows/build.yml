@@ -20,7 +20,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '11'
-        distribution: 'adoptopenjdk'  # Or 'zulu', 'adoptopenjdk', etc.
+        distribution: 'adoptium' 
 
     - name: Download Talend Open Studio
       run: |
