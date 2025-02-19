@@ -23,8 +23,9 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb libgtk-3-0 libxtst6 unzip libcanberra-gtk3-module libxkbcommon-x11-0 \
-                                  libdbus-glib-1-2 libcanberra-gtk-module
+          sudo apt-get install -y xvfb libgtk-3-0 libxtst6 unzip libcanberra-gtk3-module \
+                                  libxkbcommon-x11-0 libdbus-glib-1-2 libcanberra-gtk-module \
+                                  x11-utils  # <-- Added for xdpyinfo
 
       - name: Download Talend
         run: |
