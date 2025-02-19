@@ -28,14 +28,21 @@ jobs:
         unzip TOS_DI-20211109_1610-V8.0.1.zip -d /opt/talend-tos
         chmod +x /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64
 
-  # Run Talend build job
-    - name: Run Talend Job
+    - name: Set up Xvfb
       run: |
-        sudo apt-get install xvfb
+        sudo apt-get install -y xvfb
         Xvfb :99 -screen 0 1024x768x24 &
         export DISPLAY=:99
+
+    - name: Debug Talend Installation
+      run: |
+        ls -l /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/
+        ls -l /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+        cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+
+    - name: Run Talend Build
+      run: |
         /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 -nosplash -consoleLog -data $GITHUB_WORKSPACE -application org.talend.commandline.CommandLine -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone || echo "Talend build failed, check the log" && cat $GITHUB_WORKSPACE/.metadata/.log
-      continue-on-error: true # This ensures the job doesn't stop if the error happens
 
       # Display the log if the Talend job fails
     - name: Display Talend logs
