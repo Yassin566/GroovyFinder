@@ -35,6 +35,30 @@ jobs:
           Xvfb :99 -screen 0 1024x768x24 &
           export DISPLAY=:99
 
+      - name: Clean up unnecessary OSGi bundles
+        run: |
+          # Backup the original config.ini file
+          cp /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini.bak
+
+          # Remove or comment out unnecessary OSGi bundles
+          sed -i '/org.eclipse.compare.win32/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.jdt.launching.macosx/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.jdt.launching.ui.macosx/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.swt.cocoa.macosx/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.swt.win32.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.equinox.launcher.win32.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.equinox.security.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.core.filesystem.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.core.net.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.core.resources.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.ui.win32/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.e4.ui.swt.win32/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.eclipse.ecf.provider.filetransfer.httpclient45.win32/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i '/org.apache.httpcomponents.httpclient.win/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+
+          # Verify the changes
+          cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+
       - name: Debug Talend Installation
         run: |
           ls -l /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/
