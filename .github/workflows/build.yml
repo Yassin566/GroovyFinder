@@ -28,18 +28,13 @@ jobs:
           unzip TOS_DI-20211109_1610-V8.0.1.zip -d /opt/talend-tos
           chmod +x /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64
 
-      - name: Set up Xvfb
+      - name: Install Xvfb
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb
-          Xvfb :99 -screen 0 1024x768x24 &
-          export DISPLAY=:99
-          sleep 5  # Allow Xvfb to initialize
-          echo "DISPLAY is set to $DISPLAY"
 
-      - name: Clean up OSGi bundles and fix config.ini
+      - name: Clean up OSGi bundles
         run: |
-          cp /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini.bak
           sed -i \
             -e '/org.eclipse.compare.win32/d' \
             -e '/org.eclipse.jdt.launching.macosx/d' \
@@ -56,14 +51,21 @@ jobs:
             -e '/org.eclipse.ecf.provider.filetransfer.httpclient45.win32/d' \
             -e '/org.apache.httpcomponents.httpclient.win/d' \
             /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i 's/osgi.bundles=.*/osgi.bundles=org.eclipse.core.runtime@start,org.eclipse.equinox.simpleconfigurator@1:start/' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+
+      - name: Fix config.ini for OSGi bundles
+        run: |
+          sed -i 's/osgi.bundles=.*/osgi.bundles=org.eclipse.core.runtime@start,org.eclipse.equinox.simpleconfigurator@1:start,org.eclipse.equinox.common@2:start,org.eclipse.update.configurator@3:start,org.eclipse.core.runtime@4:start/' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
           cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
 
-      - name: Run Talend Build
+      - name: Run Talend Build with Xvfb
         run: |
-          /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 -nosplash -consoleLog -data $GITHUB_WORKSPACE -application org.talend.commandline.CommandLine -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone || (echo "Talend build failed, check the log" && cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/*.log)
+          xvfb-run -a -e /dev/stdout --server-args="-screen 0 1024x768x24" \
+            /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 \
+            -nosplash -consoleLog -data $GITHUB_WORKSPACE \
+            -application org.talend.commandline.CommandLine \
+            -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone
 
-      - name: Display Talend logs
+      - name: Display Talend logs on failure
         if: failure()
         run: |
           echo "Talend Job Failed. Displaying the log:"
