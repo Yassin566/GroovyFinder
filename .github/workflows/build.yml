@@ -23,7 +23,7 @@ jobs:
     - name: Run Talend Job
       run: |
         echo $env:GITHUB_WORKSPACE
-        Start-Process "C:\SandBox\MAIF\TOS_DI-20160912_1228-V6.1.2\TOS_DI-win-x86_64.exe" -ArgumentList "-nosplash", "-consoleLog", "-data", "$env:GITHUB_WORKSPACE\GroovyFinder", "-application", "org.talend.commandline.CommandLine", "-cmd", "buildJob", "-job", "GroovyFind_0.1", "-output", "$env:GITHUB_WORKSPACE\build_output", "-format", "standalone"
+        Start-Process "C:\SandBox\MAIF\TOS_DI-20160912_1228-V6.1.2\TOS_DI-win-x86_64.exe" -ArgumentList "-nosplash", "-consoleLog", "-data", "$env:GITHUB_WORKSPACE", "-application", "org.talend.commandline.CommandLine", "-cmd", "buildJob", "-job", "GroovyFind_0.1", "-output", "$env:GITHUB_WORKSPACE\build_output", "-format", "standalone"
       continue-on-error: true # This ensures the job doesn't stop if the error happens
 
     - name: Display Talend logs
