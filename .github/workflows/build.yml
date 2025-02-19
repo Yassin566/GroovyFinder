@@ -25,7 +25,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb libgtk-3-0 libxtst6 unzip libcanberra-gtk3-module \
                                   libxkbcommon-x11-0 libdbus-glib-1-2 libcanberra-gtk-module \
-                                  x11-utils  # <-- Added for xdpyinfo
+                                  x11-utils dbus-x11 # <-- Added dbus-x11 to resolve accessibility errors
 
       - name: Download Talend
         run: |
@@ -52,7 +52,7 @@ jobs:
           Xvfb $DISPLAY -screen 0 1920x1080x24 +extension GLX -nolisten tcp -noreset &
           sleep 5
           xdpyinfo -display :99  # Ensure Xvfb is running
-          
+
       - name: Clean Talend Configuration
         run: |
           rm -rf /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/org.eclipse.osgi
