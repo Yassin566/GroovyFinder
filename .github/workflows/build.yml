@@ -30,7 +30,6 @@ jobs:
 
     - name: Build Talend Job
       run: |
-        ll
         /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 -nosplash -Duser.name=runner -data $GITHUB_WORKSPACE -application org.talend.commandline.CommandLine -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone
 
     - name: Package Job into Zip
