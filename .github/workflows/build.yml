@@ -31,7 +31,7 @@ jobs:
 
     - name: Run Talend Job
       run: |
-        Start-Process "C:\opt\talend-tos\TOS_DI-20211109_1610-V8.0.1\TOS_DI-linux-gtk-x86_64.exe" -ArgumentList "-nosplash", "-consoleLog", "-data", "$env:GITHUB_WORKSPACE", "-application", "org.talend.commandline.CommandLine", "-cmd", "buildJob", "-job", "GroovyFind", "-output", "$env:GITHUB_WORKSPACE\build_output", "-format", "standalone"
+        Start-Process "C:\opt\talend-tos\TOS_DI-20211109_1610-V8.0.1\TOS_DI-win-x86_64.exe" -ArgumentList "-nosplash", "-consoleLog", "-data", "$env:GITHUB_WORKSPACE", "-application", "org.talend.commandline.CommandLine", "-cmd", "buildJob", "-job", "GroovyFind", "-output", "$env:GITHUB_WORKSPACE\build_output", "-format", "standalone"
       continue-on-error: true # This ensures the job doesn't stop if the error happens
 
     - name: Display Talend logs
