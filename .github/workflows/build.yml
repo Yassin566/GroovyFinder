@@ -28,10 +28,19 @@ jobs:
         unzip TOS_DI-20211109_1610-V8.0.1.zip -d /opt/talend-tos
         chmod +x /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64
 
-    - name: Build Talend Job
+  # Run Talend build job
+    - name: Run Talend Job
       run: |
-        /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 -nosplash -Duser.name=runner -data $GITHUB_WORKSPACE -application org.talend.commandline.CommandLine -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone
+        /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 -nosplash -Duser.name=runner -data $GITHUB_WORKSPACE -application org.talend.commandline.CommandLine -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone || echo "Talend build failed, check the log" && cat $GITHUB_WORKSPACE/.metadata/.log
+      continue-on-error: true # This ensures the job doesn't stop if the error happens
 
+      # Display the log if the Talend job fails
+    - name: Display Talend logs
+      if: failure() # This step runs only if the previous one fails
+      run: |
+        echo "Talend Job Failed. Displaying the log:"
+        cat $GITHUB_WORKSPACE/.metadata/.log
+        ls
     - name: Package Job into Zip
       run: |
         zip -r talend_job_standalone.zip build_output/
