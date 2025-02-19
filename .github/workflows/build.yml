@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
-          distribution: 'zulu'  # Using Zulu OpenJDK distribution
+          distribution: 'zulu'
 
       - name: Download Talend Open Studio
         run: |
@@ -34,43 +34,37 @@ jobs:
           sudo apt-get install -y xvfb
           Xvfb :99 -screen 0 1024x768x24 &
           export DISPLAY=:99
+          sleep 5  # Allow Xvfb to initialize
           echo "DISPLAY is set to $DISPLAY"
 
-      - name: Clean up unnecessary OSGi bundles and fix config.ini
+      - name: Clean up OSGi bundles and fix config.ini
         run: |
-          # Backup the original config.ini file
           cp /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini.bak
-
-          # Remove unnecessary OSGi bundles
-          sed -i '/org.eclipse.compare.win32/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.jdt.launching.macosx/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.jdt.launching.ui.macosx/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.swt.cocoa.macosx/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.swt.win32.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.equinox.launcher.win32.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.equinox.security.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.core.filesystem.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.core.net.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.core.resources.win32.x86_64/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.ui.win32/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.e4.ui.swt.win32/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.eclipse.ecf.provider.filetransfer.httpclient45.win32/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          sed -i '/org.apache.httpcomponents.httpclient.win/d' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-
-          # Ensure org.eclipse.core.runtime is included and started
-          if ! grep -q "org.eclipse.core.runtime@start" /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini; then
-            echo "osgi.bundles=org.eclipse.core.runtime@start,org.eclipse.equinox.simpleconfigurator@1:start" >> /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
-          fi
-
-          # Verify the changes
+          sed -i \
+            -e '/org.eclipse.compare.win32/d' \
+            -e '/org.eclipse.jdt.launching.macosx/d' \
+            -e '/org.eclipse.jdt.launching.ui.macosx/d' \
+            -e '/org.eclipse.swt.cocoa.macosx/d' \
+            -e '/org.eclipse.swt.win32.win32.x86_64/d' \
+            -e '/org.eclipse.equinox.launcher.win32.win32.x86_64/d' \
+            -e '/org.eclipse.equinox.security.win32.x86_64/d' \
+            -e '/org.eclipse.core.filesystem.win32.x86_64/d' \
+            -e '/org.eclipse.core.net.win32.x86_64/d' \
+            -e '/org.eclipse.core.resources.win32.x86_64/d' \
+            -e '/org.eclipse.ui.win32/d' \
+            -e '/org.eclipse.e4.ui.swt.win32/d' \
+            -e '/org.eclipse.ecf.provider.filetransfer.httpclient45.win32/d' \
+            -e '/org.apache.httpcomponents.httpclient.win/d' \
+            /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
+          sed -i 's/osgi.bundles=.*/osgi.bundles=org.eclipse.core.runtime@start,org.eclipse.equinox.simpleconfigurator@1:start/' /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
           cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/config.ini
 
       - name: Run Talend Build
         run: |
-          /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 -nosplash -consoleLog -data $GITHUB_WORKSPACE -application org.talend.commandline.CommandLine -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone || echo "Talend build failed, check the log" && cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/*.log
+          /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/TOS_DI-linux-gtk-x86_64 -nosplash -consoleLog -data $GITHUB_WORKSPACE -application org.talend.commandline.CommandLine -cmd buildJob -job GroovyFind -output $GITHUB_WORKSPACE/build_output -format standalone || (echo "Talend build failed, check the log" && cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/*.log)
 
       - name: Display Talend logs
-        if: failure() # This step runs only if the previous one fails
+        if: failure()
         run: |
           echo "Talend Job Failed. Displaying the log:"
           cat /opt/talend-tos/TOS_DI-20211109_1610-V8.0.1/configuration/*.log
